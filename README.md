@@ -1,2 +1,4 @@
-# MachineLearning
-My machine learning course in a repo
+# Machine Learning
+The following repository contains machine learning algorithms written from scratch. The list will be updated weekly. 
+
+
