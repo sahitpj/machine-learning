@@ -21,6 +21,13 @@ class Decision_Node:
 class Leaf:
     def __init__(self, rows, data_df):
         self.predictions = class_counts(rows, data_df)
+        index = None
+        count = 0
+        for key in self.predictions.keys():
+            if self.predictions[key] > count:
+                count = self.predictions[key]
+                index = key
+        self.predicted_value = index
 
 
 class Question(object):
@@ -31,6 +38,13 @@ class Question(object):
 
     def match(self, row_num):
         val = self.df.iloc[row_num, self.column]
+        if is_numeric(val):
+            return val >= self.value
+        else:
+            return val == self.value
+
+    def predict(self, data_row):
+        val = data_row[self.column]
         if is_numeric(val):
             return val >= self.value
         else:

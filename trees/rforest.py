@@ -1,5 +1,5 @@
 from dtree import  decisionTree
-import random, math
+import random, math, operator
 
 
 class randomForest(decisionTree):
@@ -65,3 +65,28 @@ class randomForest(decisionTree):
             tree = self.build_tree(rows, cols)
             trees.append(tree)
         self.forest = trees
+
+
+    def construct_forest(self):
+        for i in xrange(len(self.forest)):
+            print '### Tree No  '+str(i+1)+'######'
+            print ' '
+            print ' '
+            self.construct_f_tree(i, spacing="")
+            print ' '
+            print ' '
+
+
+    def construct_f_tree(self, tree_no, spacing=""):
+        self.construct_tree(self.forest[tree_no], spacing="")
+
+    
+    def predict_f(self, data_row):
+        predictions_forest = {}
+        for i in xrange(len(self.forest)):
+            prediction_list, prediction = self.predict(data_row, self.forest[i])
+            try:
+                predictions_forest[prediction] += 1
+            except:
+                predictions_forest[prediction] = 1
+        return max(predictions_forest.iteritems(), key=operator.itemgetter(1))[0]

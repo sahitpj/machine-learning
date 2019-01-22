@@ -102,15 +102,24 @@ class decisionTree(object):
         self.construct_tree(node.false_branch, spacing + "  ")
 
     def classify(self, row, node):
-
         # Base case: we've reached a leaf
         if isinstance(node, Leaf):
-            return node.predictions
+            return node.predictions, node.predicted_value
 
         if node.question.match(row):
-            return classify(row, node.true_branch)
+            return self.classify(row, node.true_branch)
         else:
-            return classify(row, node.false_branch)
+            return self.classify(row, node.false_branch)
+
+
+    def predict(self, data_row, node): #data_row is a list of the test data.
+        if isinstance(node, Leaf):
+            return node.predictions, node.predicted_value
+
+        if node.question.predict(data_row):
+            return self.predict(data_row, node.true_branch)
+        else:
+            return self.predict(data_row, node.false_branch)
 
     def print_leaf(self, counts):
         """A nicer way to print the predictions at a leaf."""
@@ -125,6 +134,7 @@ class decisionTree(object):
     def train(self):
         self.tree = self.build_tree(self.main_rows)
         print 'Tree built successfully'
+        return self.tree
 
     def print_tree(self):
         self.construct_tree(self.tree, "")

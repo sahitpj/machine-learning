@@ -8,6 +8,7 @@ filepath = 'trees/data.csv'
 data = import_data(filepath)
 
 dt = decisionTree('classification', 'gini', data, 0, 100)
-dt.train()
-
-dt.print_tree()
+tree = dt.train()
+test = ['Overcast','Cold','Normal','Strong']
+a,b = dt.predict(test, tree)
+print a, b
