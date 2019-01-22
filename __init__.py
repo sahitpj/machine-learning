@@ -1,1 +1,1 @@
-from decision_trees import decisionTree
+from trees import decisionTree
