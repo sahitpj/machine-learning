@@ -28,7 +28,7 @@ def entropy(row_indecies, data_df):
 
 def std(rows_indecies, data_df):
     g = np.array([data_df.iloc[i, -1] for i in rows_indecies])
-    return np.std(g)
+    return np.std(g)**2
 
 
 def info_gain(left, right, current_uncertainty, method, data_df):
@@ -39,4 +39,4 @@ def info_gain(left, right, current_uncertainty, method, data_df):
     elif method == 'entropy':
         return current_uncertainty - p * entropy(left, data_df) - (1 - p) * entropy(right, data_df)
     elif method == 'std':
-        return current_uncertainty - p * std(left, data_df) - (1 - p) * std(right, data_df)
+        return current_uncertainty -  std(left, data_df) -  std(right, data_df)

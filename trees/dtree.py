@@ -1,25 +1,27 @@
 from utils import class_counts, unique_vals, is_numeric
-from entropy import gini, info_gain
+from entropy import gini, info_gain, std, entropy
 from nodes import Decision_Node, Leaf, Question
 
 import pandas as pd
 
-
-
 '''
-Input data is in the form of pandas DataFrame. (Table structure).
-The last feature is assumed to be the Y-festure, ie the feature to be predicted.
+Input data is in the form of pandas DataFrame. (Table structure), however input to methods 
+is taken as list of row indecies for the dataframe
+The last feature is assumed to be the Y-feature, ie the feature to be predicted.
 '''
-
-
-
 
 
 class decisionTree(object):
-    def __init__(self, type_, method, data, resampling_status=0, max_depth=2 ): #resanpling status, tells whether features can be taken again for splitting
-        self.max_depth = max_depth
-        self.method = method
-        self.type = type_
+    '''
+    - resanpling status, tells whether features can be taken again for splitting
+    - type here means either a classification - distinct classes or regression - continous classes
+    - method here is minimization function - gini, entropy or std
+    '''
+    def __init__(self, type_, method, data, resampling_status=0, max_depth=2 ): 
+        self.max_depth = 2
+        self.counter = 0
+        self.method = method 
+        self.type = type_ 
         self.tree = None
         self.data = data
         self.samples = data.shape[0]
@@ -28,10 +30,8 @@ class decisionTree(object):
         self.main_rows = range(self.samples)
         self.features_done = []
         self.resampling_status = resampling_status
-        self.dict_tree = {}
-
-        if type_ == 'regression':
-            assert(method == 'std')
+        if self.type == 'regression':
+            assert(self.method == 'std')
 
 
     def partition(self, rows, question):
@@ -46,9 +46,14 @@ class decisionTree(object):
 
     def find_best_split(self, rows):
         best_gain = 0  
-        best_question = None  
-        current_uncertainty = gini(rows, self.data)
-
+        best_question = None 
+        if self.type == 'classification':
+            if self.method == 'gini':
+                current_uncertainty = gini(rows, self.data)
+            elif self.method == 'entropy':
+                current_uncertainty = entropy(rows, self.data)
+        elif self.type == 'regression':
+            current_uncertainty = std(rows, self.data)
         for col in range(self.features): 
             if self.is_feature_done(col):
                 continue #goes to the next value of the loop
@@ -79,8 +84,10 @@ class decisionTree(object):
 
 
     def build_tree(self, rows):
-        if self.current_depth == self.max_depth:
-            return 
+        self.counter += 1
+        print self.counter
+        if self.counter >= 2**(self.max_depth+1) - 1:
+            return Leaf(rows, self.data)
         gain, question = self.find_best_split(rows)
         if gain == 0:
             return Leaf(rows, self.data)
@@ -88,7 +95,6 @@ class decisionTree(object):
         true_rows, false_rows = self.partition(rows, question)
         true_branch = self.build_tree(true_rows)
         false_branch = self.build_tree(false_rows)
-        self.current_depth += 1
         return Decision_Node(question, true_branch, false_branch)
 
     def construct_tree(self, node, spacing=""):
@@ -105,7 +111,8 @@ class decisionTree(object):
         # Base case: we've reached a leaf
         if isinstance(node, Leaf):
             return node.predictions, node.predicted_value
-
+        # node.predictions is the dictionary of predictions at that leaf
+        # node.predicted_value is the predicted value, basically the most probable prediction from argmax(node.predictions)
         if node.question.match(row):
             return self.classify(row, node.true_branch)
         else:
@@ -130,8 +137,8 @@ class decisionTree(object):
         return probs
 
 
-
     def train(self):
+        # learns data tree
         self.tree = self.build_tree(self.main_rows)
         print 'Tree built successfully'
         return self.tree
