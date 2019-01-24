@@ -4,8 +4,10 @@ Assuming all the data is in the form of a DataFrame,
 However input to trees are in the form of row indecies. 
 '''
 import math, random
+import pandas as pd
 
-def K_fold_split(dataset, n_folds):
+def K_fold_split(data, n_folds):
+    dataset = range(data.shape[0])
     dataset_split = list()
     dataset_copy = list(dataset)
     fold_size = int(len(dataset) / n_folds)
@@ -18,7 +20,8 @@ def K_fold_split(dataset, n_folds):
     return dataset_split
 
 
-def normal_split(dataset, param):
+def normal_split(data, param):
+    dataset = range(data.shape[0])
     dataset_split = list()
     dataset_copy = list(dataset)
     train_size = int(math.floor(len(dataset)*param))
@@ -45,3 +48,15 @@ def normal_split(dataset, param):
         fold.append(index)
     dataset_split.append(fold)
     return dataset_split  #in the order of train, validate, test
+
+
+def transform_pd(rows, df):
+    data = pd.DataFrame(columns=df.columns)
+    for i in rows:
+        data = data.append(df.iloc[i, :])
+    return data
+
+
+def transform_question(row, df):
+    df_row = df.iloc[row, :]
+    return list(df_row)[:-1]

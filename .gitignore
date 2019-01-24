@@ -3,3 +3,9 @@
 
 #data files
 *.csv
+
+#ipython books
+*.ipynb
+
+#ipython checkpoints
+.ipynb_checkpoints/

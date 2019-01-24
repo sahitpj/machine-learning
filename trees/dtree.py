@@ -84,10 +84,9 @@ class decisionTree(object):
 
 
     def build_tree(self, rows):
-        self.counter += 1
-        print self.counter
-        if self.counter >= 2**(self.max_depth+1) - 1:
-            return Leaf(rows, self.data)
+        # self.counter += 1
+        # if self.counter >= 2**(self.max_depth+1) - 1:
+        #     return Leaf(rows, self.data)
         gain, question = self.find_best_split(rows)
         if gain == 0:
             return Leaf(rows, self.data)
