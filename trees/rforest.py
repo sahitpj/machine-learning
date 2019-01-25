@@ -46,8 +46,6 @@ class randomForest(decisionTree):
 
     def build_tree(self, rows, cols):
         # print self.current_depth
-        if self.current_depth == self.max_depth:
-            return 
         gain, question = self.find_best_split(rows, cols)
         if gain == 0:
             return Leaf(rows, self.data)
