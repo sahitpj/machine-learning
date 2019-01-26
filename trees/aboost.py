@@ -74,4 +74,22 @@ class ADABoost(decisionTree):
         assert(len(self.model_stage_values) == self.iterations)
         print self.model_stage_values
         print 'ADABoost done successfully'
-        
+
+
+    def predict_adaboost(self, data_row):
+        k = class_counts(self.samples, self.data).keys()
+        classes = {
+            k[0]: 1,
+            k[1]: -1
+        }
+        print classes
+        t = 0.0
+        for i in xrange(self.iterations):
+            tree = self.tree[i]
+            a,prediction = self.predict(data_row, tree)
+            t += classes[prediction]* self.model_stage_values[i]
+        if t >= 0:
+            return k[0]
+        else:
+            return k[1]
+
