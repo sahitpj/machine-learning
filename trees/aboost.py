@@ -41,19 +41,22 @@ class ADABoost(decisionTree):
         count = 0 
         terror = list()
         for i in xrange(self.samples):
-            p = (self.predict(transform_question(i, self.data), tree)[-1] == self.data.iloc[i, -1])
+            p = (self.predict(transform_question(i, self.data), tree)[-1] != self.data.iloc[i, -1])
             count += p*self.weights[i]
             terror.append(p)
+        self.trees.append(tree)
         error = count/sum(self.weights)
+        if error == 0:
+            return 0
         stage_error = self.stage(error)
         self.model_stage_values.append(stage_error)
         self.update_weights(terror, stage_error)
-        self.trees.append(tree)
+        return 1
 
 
     def build_tree(self, rows):
         self.counter += 1
-        if self.counter >= 1:
+        if self.counter > 1:
             return Leaf(rows, self.data)
         gain, question = self.find_best_split(rows)
         if gain == 0:
@@ -69,23 +72,22 @@ class ADABoost(decisionTree):
         # learns data tree
         self.initialize_weights()
         for i in xrange(self.iterations):
-            self.iterate()
+            if not self.iterate():
+                break
             self.counter = 0
-        assert(len(self.model_stage_values) == self.iterations)
         print self.model_stage_values
         print 'ADABoost done successfully'
 
 
     def predict_adaboost(self, data_row):
-        k = class_counts(self.samples, self.data).keys()
+        k = class_counts(self.main_rows, self.data).keys()
         classes = {
             k[0]: 1,
             k[1]: -1
         }
-        print classes
         t = 0.0
-        for i in xrange(self.iterations):
-            tree = self.tree[i]
+        for i in xrange(len(self.trees)):
+            tree = self.trees[i]
             a,prediction = self.predict(data_row, tree)
             t += classes[prediction]* self.model_stage_values[i]
         if t >= 0:

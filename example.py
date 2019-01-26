@@ -64,3 +64,11 @@ train_validate = transform_pd(train+validate, iris_data)
 
 ab = ADABoost('classification', 'gini', iris_data, 8)
 ab.train()
+
+
+train, validate, test = normal_split(iris_data, 0.7)
+
+count = 0 
+for row in test:
+    count += (ab.predict_adaboost(list(iris_data.iloc[row, :-1])) == iris_data.iloc[row, -1])
+print count/len(test)
