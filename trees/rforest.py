@@ -76,6 +76,24 @@ class randomForest(decisionTree):
         tree = self.build_tree(rows, cols)
         q.put(tree)
 
+    def indi_tree_serial(self):
+        feature_count = int(math.floor(self.features**0.5)) #number of features for each tree
+        sample_count = int(self.samples)/feature_count #number of samples for each tree (re-sampling allowed)
+        cols = []       #generate features set for each forest
+        rows = []       #generate sample set for each forest
+        count_1 = 0
+        count_2 = 0
+        while count_1 < feature_count:
+            index_1 = random.randrange(self.features)
+            if index_1 not in cols:
+                cols.append(index_1)
+                count_1 += 1
+        while count_2 < sample_count:
+            index_1 = random.randrange(self.samples)
+            rows.append(index_1)
+            count_2 += 1
+        tree = self.build_tree(rows, cols)
+        return tree
 
     
     def train(self): #multiprocessing enabled forest generation
@@ -89,6 +107,15 @@ class randomForest(decisionTree):
         self.forest = trees
         print 'forest successfully built'
         return self.forest
+
+    def train_serial(self):
+        trees = []
+        for i in xrange(self.n_fold):
+            trees.append(self.indi_tree_serial())
+        self.forest = trees
+        print 'forest successfully built'
+        return self.forest
+
 
 
     def construct_forest(self):

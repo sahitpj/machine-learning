@@ -9,3 +9,6 @@
 
 #ipython checkpoints
 .ipynb_checkpoints/
+
+#external data
+datsets/
