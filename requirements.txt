@@ -1,3 +1,4 @@
+torch==1.0.0
 pandas==0.23.4
+autograd==1.2
 numpy==1.16.0
-multiprocessing==2.6.2.1

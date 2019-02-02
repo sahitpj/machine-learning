@@ -1,2 +1,3 @@
 from trees import decisionTree, randomForest, ADABoost
+from regression import normalEquationRegression, gradientDescentRegression, gradientDescentAutogradRegression, TorchNormalEquationRegression, TorchGradientDescentRegression, TorchGradientDescentAutogradRegression
 from utils import K_fold_split, normal_split, transform_pd, transform_question
