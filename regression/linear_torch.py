@@ -15,6 +15,7 @@ class NotTrained(Exception):
 
 class TorchNormalEquationRegression(object):
     '''
+    Uses matrix equation solving method to solve regression problem
     The following assumes that a bias column has been added to X (1st column), before sending it into the regressor.
 
     The following convention is following : rows -> samples ; columns -> features
@@ -43,6 +44,9 @@ class TorchNormalEquationRegression(object):
 
 
 class TorchGradientDescentRegression(object):
+    '''
+    Gradient descent using gradient descnet, by conventional methods
+    '''
     def __init__(self, X, Y, alpha, **kwargs):
         self.X = X #X is a numpy array of nxm 
         self.Y = Y #Y is a numpy array of nx1
@@ -115,23 +119,25 @@ class TorchGradientDescentRegression(object):
 
     
 class TorchGradientDescentAutogradRegression(TorchGradientDescentRegression):
+    '''
+    Using Pytorch's built in Autograd to compute the gradient. Recommended for computing gradients of complex networks
+    '''
     def __init__(self,  X, Y, alpha, **kwargs):
         super(TorchGradientDescentAutogradRegression, self).__init__(X, Y, alpha, **kwargs)
         self.objective = None
         self.gradients = None
-        self.i = None
 
     def initialise_theta(self):
         try:
             j = self.theta[0, 0]
-            theta = torch.tensor(self.theta, requires_grad=True)
+            theta = torch.tensor(self.theta, requires_grad=True) #using previous theta and adding gradient function
         except:
-            theta = torch.rand(self.features, 1, requires_grad=True)
+            theta = torch.rand(self.features, 1, requires_grad=True) #otherwise initialising theta to a random value
         self.theta = theta
         return theta    
 
     def ForwardFunction(self):
-        p = torch.mean((self.Y-self.X.mm(self.theta.double()))**2)
+        p = torch.mean((self.Y-self.X.mm(self.theta.double()))**2) #Loss function forward function
         self.objective = p
         return p
     
@@ -140,13 +146,12 @@ class TorchGradientDescentAutogradRegression(TorchGradientDescentRegression):
         k = self.ForwardFunction()
         self.objective.backward()
         self.gradients = self.theta.grad
-        self.i = self.gradients.clone()
 #         self.theta = self.theta.clone()
-        return self.i
+        return self.gradients
 
     def update_theta(self):
         h = self.get_grads()
-        current_theta = self.theta.clone()
+        current_theta = self.theta.clone() #cloing theta so that we don't update in-place values
         current_theta -= self.gradients*self.alpha
         self.theta = current_theta
         return current_theta

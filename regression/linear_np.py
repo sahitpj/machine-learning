@@ -15,6 +15,7 @@ class NotTrained(Exception):
 
 class normalEquationRegression(object):
     '''
+    Uses Matrix multiplication to find the solution for the Regression problem
     The following assumes that a bias column has been added to X (1st column), before sending it into the regressor.
 
     The following convention is following : rows -> samples ; columns -> features
@@ -43,6 +44,9 @@ class normalEquationRegression(object):
 
 
 class gradientDescentRegression(object):
+    '''
+    Using Gradient descent to solve the regression problem
+    '''
     def __init__(self, X, Y, alpha, **kwargs):
         self.X = X #X is a numpy array of nxm 
         self.Y = Y #Y is a numpy array of nx1
@@ -118,6 +122,9 @@ class gradientDescentRegression(object):
 
     
 class gradientDescentAutogradRegression(gradientDescentRegression):
+    '''
+    Using the autograd function to find gradient for the Regression problem
+    '''
     def __init__(self,  X, Y, alpha, **kwargs):
         super(gradientDescentAutogradRegression, self).__init__(X, Y, alpha, **kwargs)
         self.gradient_func = grad(self.training_loss)
