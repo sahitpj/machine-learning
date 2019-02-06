@@ -119,9 +119,14 @@ class TorchGradientDescentAutogradRegression(TorchGradientDescentRegression):
         super(TorchGradientDescentAutogradRegression, self).__init__(X, Y, alpha, **kwargs)
         self.objective = None
         self.gradients = None
+        self.i = None
 
     def initialise_theta(self):
-        theta = torch.rand(self.features, 1, requires_grad=True)
+        try:
+            j = self.theta[0, 0]
+            theta = torch.tensor(self.theta, requires_grad=True)
+        except:
+            theta = torch.rand(self.features, 1, requires_grad=True)
         self.theta = theta
         return theta    
 
@@ -131,23 +136,30 @@ class TorchGradientDescentAutogradRegression(TorchGradientDescentRegression):
         return p
     
     def get_grads(self):
+        self.initialise_theta()
+        k = self.ForwardFunction()
         self.objective.backward()
-        self.gradients = self.X.grad
+        self.gradients = self.theta.grad
+        self.i = self.gradients.clone()
+#         self.theta = self.theta.clone()
+        return self.i
 
     def update_theta(self):
-        current_theta = self.theta
-        current_theta -= (self.X.mm(current_theta)*self.alpha).double()
+        h = self.get_grads()
+        current_theta = self.theta.clone()
+        current_theta -= self.gradients*self.alpha
         self.theta = current_theta
         return current_theta
 
     def train(self):
         self.initialise_theta()
-        error = 10
+        error = 0.0001
         for i in xrange(self.iterations):
             print ''
             theta = self.update_theta()
             print 'Iteration -  '+ str(i+1)
             print ''
+            print self.MSE(theta)
             if self.MSE(theta) <= error:
                 break
         print '### Training complete'
