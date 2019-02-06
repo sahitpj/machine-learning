@@ -121,12 +121,12 @@ class TorchGradientDescentAutogradRegression(TorchGradientDescentRegression):
         self.gradients = None
 
     def initialise_theta(self):
-        theta = torch.rand(self.features, 1).double()
+        theta = torch.rand(self.features, 1, requires_grad=True)
         self.theta = theta
         return theta    
 
     def ForwardFunction(self):
-        p = torch.mean((self.Y-self.X.mm(self.theta))**2)
+        p = torch.mean((self.Y-self.X.mm(self.theta.double()))**2)
         self.objective = p
         return p
     
@@ -136,14 +136,12 @@ class TorchGradientDescentAutogradRegression(TorchGradientDescentRegression):
 
     def update_theta(self):
         current_theta = self.theta
-        current_theta -= self.X.mm(current_theta)*self.alpha
+        current_theta -= (self.X.mm(current_theta)*self.alpha).double()
         self.theta = current_theta
         return current_theta
 
-     def train(self):
+    def train(self):
         self.initialise_theta()
-        self.ForwardFunction()
-        self.get_grads()
         error = 10
         for i in xrange(self.iterations):
             print ''
@@ -153,14 +151,4 @@ class TorchGradientDescentAutogradRegression(TorchGradientDescentRegression):
             if self.MSE(theta) <= error:
                 break
         print '### Training complete'
-    
-
-        
-
-
-            
-    
-
-        
-
     
