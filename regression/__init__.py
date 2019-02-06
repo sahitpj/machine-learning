@@ -1,3 +1,3 @@
-from errors import MSE, SSE
+from errors import MSE, SSE, MSE_torch, SSE_torch
 from linear_np import normalEquationRegression, gradientDescentRegression, gradientDescentAutogradRegression
 from linear_torch import TorchNormalEquationRegression, TorchGradientDescentRegression, TorchGradientDescentAutogradRegression

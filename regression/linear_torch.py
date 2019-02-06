@@ -57,6 +57,8 @@ class TorchGradientDescentRegression(object):
             self.iterations = 100
         self.predictions = None
 
+    def training_loss(self, theta):
+        return self.MSE(theta)
 
     def initialise_theta(self):
         theta = torch.rand(self.features, 1)
@@ -65,16 +67,16 @@ class TorchGradientDescentRegression(object):
     
     def update_theta(self):
         current_theta = self.theta
-        gradients = torch.zeros((self.features, 1))
+        gradients = torch.zeros((self.features, 1)).double()
         for i in xrange(self.features):
             if i == 0:
                 j = torch.sum(self.Y-self.X.mm(current_theta))*(2.0/self.samples)
-                gradients[0, 0] = j
+                gradients[0, 0] = -j
             else:
                 j = torch.sum((self.Y-self.X.mm(current_theta))*torch.reshape(self.X[:, i], (self.samples,1)))*(2.0/self.samples)
-                gradients[i, 0] = j
+                gradients[i, 0] = -j
         current_theta -= gradients*self.alpha
-        self.theta = theta
+        self.theta = current_theta
         return current_theta
 
     def train(self):
@@ -85,7 +87,7 @@ class TorchGradientDescentRegression(object):
             theta = self.update_theta()
             print 'Iteration -  '+ str(i+1)
             print ''
-            if MSE_torch(self.Y, self.X.mm(theta)) <= error:
+            if self.MSE(theta) <= error:
                 break
         print '### Training complete'
         
@@ -105,21 +107,53 @@ class TorchGradientDescentRegression(object):
         elif metric == 'SSE':
             return SSE_torch(self. predictions, Y_test)
 
+    def MSE(self, theta):
+        Yy = self.X.dot(theta)
+        assert(self.Y.shape[0] == Yy.shape[0])
+        return np.sum((self.Y-Yy)**2)/self.samples
+
 
     
 class TorchGradientDescentAutogradRegression(TorchGradientDescentRegression):
     def __init__(self,  X, Y, alpha, **kwargs):
-        super(TorchGradientDescentAutogradRegression, self).__init__(self,  X, Y, alpha, **kwargs)
-        self.gradient_func = grad(self.training_loss)
+        super(TorchGradientDescentAutogradRegression, self).__init__(X, Y, alpha, **kwargs)
+        self.objective = None
+        self.gradients = None
 
-    def training_loss(self, theta):
-        return MSE_torch(self.Y, self.X.mm(theta))
+    def initialise_theta(self):
+        theta = torch.rand(self.features, 1).double()
+        self.theta = theta
+        return theta    
+
+    def ForwardFunction(self):
+        p = torch.mean((self.Y-self.X.mm(self.theta))**2)
+        self.objective = p
+        return p
+    
+    def get_grads(self):
+        self.objective.backward()
+        self.gradients = self.X.grad
 
     def update_theta(self):
         current_theta = self.theta
-        current_theta -= self.gradient_func(current_theta)*self.alpha
+        current_theta -= self.X.mm(current_theta)*self.alpha
         self.theta = current_theta
-        return theta
+        return current_theta
+
+     def train(self):
+        self.initialise_theta()
+        self.ForwardFunction()
+        self.get_grads()
+        error = 10
+        for i in xrange(self.iterations):
+            print ''
+            theta = self.update_theta()
+            print 'Iteration -  '+ str(i+1)
+            print ''
+            if self.MSE(theta) <= error:
+                break
+        print '### Training complete'
+    
 
         
 

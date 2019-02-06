@@ -56,7 +56,10 @@ class gradientDescentRegression(object):
         except:
             self.iterations = 100
         self.predictions = None
-
+        
+    def training_loss(self, theta):
+        return self.MSE(theta)
+        
 
     def initialise_theta(self):
         theta = np.random.rand(self.features, 1)
@@ -69,23 +72,24 @@ class gradientDescentRegression(object):
         for i in xrange(self.features):
             if i == 0:
                 j = np.sum(self.Y-self.X.dot(current_theta))*(2.0/self.samples)
-                gradients[0, 0] = j
+                gradients[0, 0] = -j
             else:
                 j = np.sum((self.Y-self.X.dot(current_theta))*np.reshape(self.X[:, i], (self.samples,1)))*(2.0/self.samples)
-                gradients[i, 0] = j
+                gradients[i, 0] = -j
         current_theta -= gradients*self.alpha
-        self.theta = theta
+        self.theta = current_theta
         return current_theta
 
     def train(self):
+        theta = None
         self.initialise_theta()
-        error = 10
+        error = 0.00001
         for i in xrange(self.iterations):
             print ''
             theta = self.update_theta()
             print 'Iteration -  '+ str(i+1)
             print ''
-            if MSE(self.Y, self.X.dot(theta)) <= error:
+            if self.MSE(theta) <= error:
                 break
         print '### Training complete'
         
@@ -105,15 +109,18 @@ class gradientDescentRegression(object):
         elif metric == 'SSE':
             return SSE(self. predictions, Y_test)
 
+    
+    def MSE(self, theta):
+        Yy = self.X.dot(theta)
+        assert(self.Y.shape[0] == Yy.shape[0])
+        return np.sum((self.Y-Yy)**2)/self.samples
+
 
     
 class gradientDescentAutogradRegression(gradientDescentRegression):
     def __init__(self,  X, Y, alpha, **kwargs):
-        super(gradientDescentAutogradRegression, self).__init__(self,  X, Y, alpha, **kwargs)
+        super(gradientDescentAutogradRegression, self).__init__(X, Y, alpha, **kwargs)
         self.gradient_func = grad(self.training_loss)
-
-    def training_loss(self, theta):
-        return MSE(self.Y, self.X.dot(theta))
 
     def update_theta(self):
         current_theta = self.theta
