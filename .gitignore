@@ -11,4 +11,5 @@
 .ipynb_checkpoints/
 
 #external data
-datsets/
+datsets/ 
+/gif-file
