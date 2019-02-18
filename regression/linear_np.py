@@ -1,4 +1,4 @@
-import numpy as np
+import autograd.numpy as np
 from errors import MSE, SSE
 from autograd import grad
 
@@ -133,7 +133,7 @@ class gradientDescentAutogradRegression(gradientDescentRegression):
         current_theta = self.theta
         current_theta -= self.gradient_func(current_theta)*self.alpha
         self.theta = current_theta
-        return theta
+        return current_theta
 
 
 

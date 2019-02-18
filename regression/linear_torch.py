@@ -112,9 +112,9 @@ class TorchGradientDescentRegression(object):
             return SSE_torch(self. predictions, Y_test)
 
     def MSE(self, theta):
-        Yy = self.X.dot(theta)
+        Yy = self.X.mm(theta)
         assert(self.Y.shape[0] == Yy.shape[0])
-        return np.sum((self.Y-Yy)**2)/self.samples
+        return torch.sum((self.Y-Yy)**2)/self.samples
 
 
     
@@ -129,7 +129,6 @@ class TorchGradientDescentAutogradRegression(TorchGradientDescentRegression):
 
     def initialise_theta(self):
         try:
-            j = self.theta[0, 0]
             theta = torch.tensor(self.theta, requires_grad=True) #using previous theta and adding gradient function
         except:
             theta = torch.rand(self.features, 1, requires_grad=True) #otherwise initialising theta to a random value
