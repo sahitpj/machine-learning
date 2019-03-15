@@ -61,6 +61,7 @@ class stochasticGradientDescent(TorchGradientDescentAutogradRegression):
             theta = self.epoch().double()
             print 'Epoch -  '+ str(i+1)
             print ''
+            return theta
             print self.MSE(theta)
             if self.MSE(theta) <= error:
                 break
