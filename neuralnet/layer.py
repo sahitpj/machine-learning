@@ -12,8 +12,8 @@ class Layer(object):
         
 
     def initialise_parameters(self):
-        self.parameters = np.random.rand(self.input_size, self.output_size)
-        return self.parameters * 0.001
+        self.parameters = np.random.rand(self.input_size, self.output_size) * 0.01
+        return self.parameters 
 
     
 class Dense(Layer):

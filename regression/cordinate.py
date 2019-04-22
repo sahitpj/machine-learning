@@ -1,5 +1,5 @@
 import torch 
-from errors import MSE_torch, SSE_torch
+from .errors import MSE_torch, SSE_torch
 
 class coordinateDescent(object):
     def __init__(self, X, Y, **kwargs):
@@ -41,14 +41,13 @@ class coordinateDescent(object):
         self.initialise_theta()
         error = 0.00001
         for i in xrange(self.iterations):
-            print ''
+            print('')
             theta = self.update_theta()
-            print 'Iteration -  '+ str(i+1)
-            print ''
-            print self.MSE(theta)
+            print('Iteration -  '+ str(i+1))
+            print('')
             if self.MSE(theta) <= error:
                 break
-        print '### Training complete'
+        print('### Training complete')
         
 
     def predict(self, X_test):

@@ -1,8 +1,8 @@
 import torch 
-from linear_np import gradientDescentAutogradRegression
+from .linear_np import gradientDescentAutogradRegression
 from autograd import grad
 
-class coordinateDescentLASSO(coordinateDescent):
+class coordinateDescentLASSO(object):
     def __init__(self, X, Y, lambda_, **kwargs):
         super(coordinateDescentLASSO, self).__init__(X, Y, **kwargs)
         self.lambda_ = lambda_

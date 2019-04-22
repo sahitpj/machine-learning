@@ -1,5 +1,5 @@
 import autograd.numpy as np
-from errors import MSE, SSE
+from .errors import MSE, SSE
 from autograd import grad
 
 '''
@@ -89,13 +89,13 @@ class gradientDescentRegression(object):
         self.initialise_theta()
         error = 0.00001
         for i in xrange(self.iterations):
-            print ''
+            print('')
             theta = self.update_theta()
-            print 'Iteration -  '+ str(i+1)
-            print ''
+            print('Iteration -  '+ str(i+1))
+            print('')
             if self.MSE(theta) <= error:
                 break
-        print '### Training complete'
+        print('### Training complete')
         
 
     def predict(self, X_test):

@@ -39,7 +39,7 @@ class KNearestNeighbors(object):
                 distances[i] = self.euclidean_dis(point, self.X[i, :])
         sorted_dict = sorted(distances.items(), key=operator.itemgetter(1))
         n_keys = sorted_dict.keys()[:self.n]
-        if self.type_ == 'classification'
+        if self.type_ == 'classification':
             classes = {}
             for i in range(len(n_keys)):
                 try:

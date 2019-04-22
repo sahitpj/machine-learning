@@ -1,5 +1,5 @@
 import torch
-from errors import MSE, SSE, MSE_torch, SSE_torch
+from .errors import MSE, SSE, MSE_torch, SSE_torch
 from autograd import grad
 
 '''
@@ -87,13 +87,13 @@ class TorchGradientDescentRegression(object):
         self.initialise_theta()
         error = 10
         for i in xrange(self.iterations):
-            print ''
+            print('')
             theta = self.update_theta()
-            print 'Iteration -  '+ str(i+1)
-            print ''
+            print('Iteration -  '+ str(i+1))
+            print('')
             if self.MSE(theta) <= error:
                 break
-        print '### Training complete'
+        print('### Training complete')
         
 
     def predict(self, X_test):
@@ -159,12 +159,12 @@ class TorchGradientDescentAutogradRegression(TorchGradientDescentRegression):
         self.initialise_theta()
         error = 0.0001
         for i in xrange(self.iterations):
-            print ''
+            print('')
             theta = self.update_theta()
-            print 'Iteration -  '+ str(i+1)
-            print ''
-            print self.MSE(theta)
+            print('Iteration -  '+ str(i+1))
+            print('')
+            print(self.MSE(theta))
             if self.MSE(theta) <= error:
                 break
-        print '### Training complete'
+        print('### Training complete')
     

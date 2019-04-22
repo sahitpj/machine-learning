@@ -1,7 +1,7 @@
-from dtree import  decisionTree
-from utils import class_counts, unique_vals, is_numeric
-from entropy import gini, info_gain, entropy, std
-from nodes import Decision_Node, Leaf, Question
+from .dtree import  decisionTree
+from .utils import class_counts, unique_vals, is_numeric
+from .entropy import gini, info_gain, entropy, std
+from .nodes import Decision_Node, Leaf, Question
 
 import math
 
@@ -75,8 +75,8 @@ class ADABoost(decisionTree):
             if not self.iterate():
                 break
             self.counter = 0
-        print self.model_stage_values
-        print 'ADABoost done successfully'
+        print(self.model_stage_values)
+        print('ADABoost done successfully')
 
 
     def predict_adaboost(self, data_row):

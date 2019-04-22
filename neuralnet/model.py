@@ -33,11 +33,16 @@ class Model(object):
         a = x
         z_s = list()
         a_s = [x]
+        count = 0
         for layer in self.layers:
             a_func = getActivationFunction(layer.activation_function)
+            # print(layer.parameters)
             z_s.append(a.dot(layer.parameters))
             # print(z_s[-1], "z_s")
+            # print(z_s[-1])
             a = a_func(z_s[-1])
+            # print("------")
+            # print(a)
             a_s.append(a)
             # print(a, "a")
         # print(a_s[-1])

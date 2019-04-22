@@ -1,6 +1,6 @@
-from utils import class_counts, unique_vals, is_numeric
-from entropy import gini, info_gain, std, entropy
-from nodes import Decision_Node, Leaf, Question
+from .utils import class_counts, unique_vals, is_numeric
+from .entropy import gini, info_gain, std, entropy
+from .nodes import Decision_Node, Leaf, Question
 
 import pandas as pd
 
@@ -98,12 +98,12 @@ class decisionTree(object):
 
     def construct_tree(self, node, spacing=""):
         if isinstance(node, Leaf) == 1:
-            print (spacing + "Predict", node.predictions)
+            print(spacing + "Predict", node.predictions)
             return
-        print (spacing + str(node.question))
-        print (spacing + '--> True:')
+        print(spacing + str(node.question))
+        print(spacing + '--> True:')
         self.construct_tree(node.true_branch, spacing + "  ")
-        print (spacing + '--> False:')
+        print(spacing + '--> False:')
         self.construct_tree(node.false_branch, spacing + "  ")
 
     def classify(self, row, node):
@@ -139,7 +139,7 @@ class decisionTree(object):
     def train(self):
         # learns data tree
         self.tree = self.build_tree(self.main_rows)
-        print 'Tree built successfully'
+        print('Tree built successfully')
         return self.tree
 
     def print_tree(self):

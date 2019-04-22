@@ -1,4 +1,4 @@
-from utils import class_counts, is_numeric
+from .utils import class_counts, is_numeric
 
 class Decision_Node:
     """A Decision Node asks a question.
@@ -15,7 +15,7 @@ class Decision_Node:
         self.false_branch = false_branch
 
     def show(self):
-        print self.question
+        print(self.question)
 
 
 class Leaf:

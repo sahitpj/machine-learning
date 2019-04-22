@@ -1,4 +1,4 @@
-from linear_torch import TorchGradientDescentAutogradRegression
+from .linear_torch import TorchGradientDescentAutogradRegression
 import torch, math, random
 
 class stochasticGradientDescent(TorchGradientDescentAutogradRegression):
@@ -57,12 +57,12 @@ class stochasticGradientDescent(TorchGradientDescentAutogradRegression):
         error = 0.0001
         for i in xrange(self.epochs_no):
             self.assign_batchs()
-            print ''
+            print('')
             theta = self.epoch().double()
-            print 'Epoch -  '+ str(i+1)
-            print ''
+            print('Epoch -  '+ str(i+1))
+            print('')
             return theta
-            print self.MSE(theta)
+            print(self.MSE(theta))
             if self.MSE(theta) <= error:
                 break
-        print '### Training complete'
+        print('### Training complete')

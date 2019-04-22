@@ -1,7 +1,7 @@
-from dtree import  decisionTree
-from utils import class_counts, unique_vals, is_numeric
-from entropy import gini, info_gain, entropy, std
-from nodes import Decision_Node, Leaf, Question
+from .dtree import  decisionTree
+from .utils import class_counts, unique_vals, is_numeric
+from .entropy import gini, info_gain, entropy, std
+from .nodes import Decision_Node, Leaf, Question
 
 import random, math, operator
 from multiprocessing import Process, Queue
@@ -105,7 +105,7 @@ class randomForest(decisionTree):
             trees.append(q.get())
             p.join()
         self.forest = trees
-        print 'forest successfully built'
+        print('forest successfully built')
         return self.forest
 
     def train_serial(self):
@@ -113,19 +113,19 @@ class randomForest(decisionTree):
         for i in xrange(self.n_fold):
             trees.append(self.indi_tree_serial())
         self.forest = trees
-        print 'forest successfully built'
+        print('forest successfully built')
         return self.forest
 
 
 
     def construct_forest(self):
         for i in xrange(len(self.forest)):
-            print '### Tree No  '+str(i+1)+'  ######'
-            print ' '
-            print ' '
+            print('### Tree No  '+str(i+1)+'  ######')
+            print(' ')
+            print(' ')
             self.construct_f_tree(i, spacing="")
-            print ' '
-            print ' '
+            print(' ')
+            print(' ')
 
 
     def construct_f_tree(self, tree_no, spacing=""):

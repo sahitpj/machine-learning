@@ -1,5 +1,5 @@
-from linear_torch import TorchGradientDescentAutogradRegression
-from linear_torch import TorchNormalEquationRegression
+from .linear_torch import TorchGradientDescentAutogradRegression
+from .linear_torch import TorchNormalEquationRegression
 import torch, math, random
 
 class normalEquationRidgeRegression(TorchNormalEquationRegression):
@@ -8,7 +8,7 @@ class normalEquationRidgeRegression(TorchNormalEquationRegression):
         self.lambda_ = lambda_
 
     def train(self):
-        p = torch.inverse(self.X.t().mm(self.X) + torch.eye(self.X.shape[1]))
+        p = torch.inverse(self.X.t().mm(self.X) + (self.lambda_**2)*torch.eye(self.X.shape[1]))
         k = p.mm(self.X.t())
         theta = k.mm(self.Y)
         assert(theta.shape[0] == self.features)

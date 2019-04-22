@@ -1,7 +1,6 @@
-from errors import MSE, SSE, MSE_torch, SSE_torch
-from linear_np import normalEquationRegression, gradientDescentRegression, gradientDescentAutogradRegression
-from linear_torch import TorchNormalEquationRegression, TorchGradientDescentRegression, TorchGradientDescentAutogradRegression
-from cordinate import coordinateDescent
-from lasso import coordinateDescentLASSO, coordinateDescentLASSOAutoGrad
-from ridge import normalEquationRidgeRegression, TorchridgeRegression
-from sgd import stochasticGradientDescent
+from .linear_np import normalEquationRegression, gradientDescentRegression, gradientDescentAutogradRegression
+from .linear_torch import TorchNormalEquationRegression, TorchGradientDescentRegression, TorchGradientDescentAutogradRegression
+from .cordinate import coordinateDescent
+from .lasso import coordinateDescentLASSO, coordinateDescentLASSOAutoGrad
+from .ridge import normalEquationRidgeRegression, TorchridgeRegression
+from .sgd import stochasticGradientDescent

@@ -1,3 +1,8 @@
 from trees import decisionTree, randomForest, ADABoost
 from regression import normalEquationRegression, gradientDescentRegression, gradientDescentAutogradRegression, TorchNormalEquationRegression, TorchGradientDescentRegression, TorchGradientDescentAutogradRegression
+from classification import LogisticRegression
+from naivebayes import GaussianNB
+from neighbors import KNearestNeighbors
+from neuralnet import NeuralNetwork
+from svm import SupportVectorMachine, SupportVectorMachine_D
 from utils import K_fold_split, normal_split, transform_pd, transform_question

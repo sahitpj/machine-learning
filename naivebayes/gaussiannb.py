@@ -31,7 +31,7 @@ class GaussianNB(object):
         x = np.reshape(X_test, (self.features, ))
         prob = self.params[class_]['size']/self.samples
         for i in range(self.features):
-            prob *= multivariate_normal.pdf(x[i], mean=self.params[class_]['mean'][i], cov=mean=self.params[class_]['var'][i])
+            prob *= multivariate_normal.pdf(x[i], mean=self.params[class_]['mean'][i], cov=self.params[class_]['var'][i])
         return prob
 
     def predict(X_test):

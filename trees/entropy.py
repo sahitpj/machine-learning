@@ -1,6 +1,6 @@
 import math
 import numpy 
-from utils import class_counts
+from .utils import class_counts
 
 '''
 here rows is a list of indecies for the dataframe (sample indecies)
